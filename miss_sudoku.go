@@ -1,37 +1,21 @@
 package main
 
 import (
-	"configuration"
+	"bot"
 	"fmt"
-	"github.com/ChimeraCoder/anaconda"
-	"github.com/dkua/go-sudoku"
 	"net/url"
 )
 
-// Secrets
-var CONSUMER_KEY = ""
-var CONSUMER_TOKEN = ""
-var ACCESS_KEY = ""
-var ACCESS_TOKEN = ""
-
 func main() {
-	api := configuration.GetTwitterApi()
-	puzzles := getPuzzles(*api)
-	for id, puzzle := range puzzles {
-		solved_puzzle := sudoku.Display(sudoku.Solve(puzzle))
-		fmt.Println(id)
-		fmt.Println(solved_puzzle)
+	api := bot.GetTwitterApi()
+	puzzles := bot.GetPuzzles(*api)
+  values := url.Values{}
+	for _, puzzle := range puzzles {
+    values.Set("in_reply_to_status_id", puzzle[0])
+    tweet, err := api.PostTweet(puzzle[1], values)
+    if (err != nil) {
+        fmt.Printf("%v\n%v", "Something went wrong", err)
+    }
+    fmt.Println(tweet)
 	}
-}
-
-func getPuzzles(api anaconda.TwitterApi) map[string]string {
-	puzzles := make(map[string]string, 0)
-
-	values := url.Values{}
-	values.Set("exclude_replies", "true")
-
-	timeline, err := api.GetHomeTimeline(values)
-	fmt.Println(timeline, err)
-
-	return puzzles
 }
