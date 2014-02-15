@@ -20,7 +20,7 @@ func parseTimeline(timeline []anaconda.Tweet, tweets [][]string) [][]string {
 func parseTweet(tweet anaconda.Tweet) string {
 	text, err := parseText(tweet.Text)
 	if err != nil {
-		return fmt.Sprintf("%v@%v", err, tweet.User.ScreenName)
+		return fmt.Sprintf("%v @%v", err, tweet.User.ScreenName)
 	} else {
 		return fmt.Sprintf("%v@%v", text, tweet.User.ScreenName)
 	}
