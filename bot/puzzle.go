@@ -10,7 +10,7 @@ import (
 )
 
 func parseTimeline(timeline []anaconda.Tweet) map[int64]string {
-	tweets := make(map[string]string, 0)
+	tweets := make(map[int64]string)
 	for _, tweet := range timeline {
 		tweets[tweet.Id] = parseTweet(tweet)
 	}
