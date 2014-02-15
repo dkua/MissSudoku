@@ -7,13 +7,13 @@ import (
 	"strconv"
 )
 
-func GetPuzzles(api anaconda.TwitterApi, since_id int64) map[int64]string {
+func GetSolutions(api anaconda.TwitterApi, since_id int64) [][]string {
 	values := url.Values{}
 	values.Set("since_id", strconv.FormatInt(since_id, 10))
 	values.Set("count", "50")
 
 	var max_id int64 = 0
-	tweets := make(map[int64]string)
+	tweets := make([][]string, 0)
 	for true {
 		timeline, err := api.GetMentionsTimeline(values)
 		if err != nil {
@@ -23,9 +23,8 @@ func GetPuzzles(api anaconda.TwitterApi, since_id int64) map[int64]string {
 			break
 		}
 
-		for id, text := range parseTimeline(timeline) {
-			tweets[id] = text
-		}
+		tweets = parseTimeline(timeline, tweets)
+
 		if max_id == 0 {
 			max_id = timeline[len(timeline)-1].Id - 1
 			values.Set("max_id", strconv.FormatInt(max_id, 10))
@@ -45,6 +44,5 @@ func GetSinceId(api anaconda.TwitterApi) int64 {
 		return 0
 	}
 	last_tweet := user_timeline[0]
-	fmt.Println(user_timeline)
 	return last_tweet.InReplyToStatusID
 }

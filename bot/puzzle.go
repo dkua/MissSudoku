@@ -6,13 +6,13 @@ import (
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/dkua/go-sudoku"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
-func parseTimeline(timeline []anaconda.Tweet) map[int64]string {
-	tweets := make(map[int64]string)
+func parseTimeline(timeline []anaconda.Tweet, tweets [][]string) [][]string {
 	for _, tweet := range timeline {
-		tweets[tweet.Id] = parseTweet(tweet)
+		tweets = append(tweets, []string{strconv.FormatInt(tweet.Id, 10), parseTweet(tweet)})
 	}
 	return tweets
 }
