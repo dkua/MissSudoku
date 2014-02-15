@@ -1,21 +1,25 @@
 package main
 
 import (
-	"bot"
 	"fmt"
+	"github.com/dkua/MissSudoku/bot"
 	"net/url"
+	"time"
 )
 
 func main() {
-	api := bot.GetTwitterApi()
-	puzzles := bot.GetPuzzles(*api)
-  values := url.Values{}
-	for _, puzzle := range puzzles {
-    values.Set("in_reply_to_status_id", puzzle[0])
-    tweet, err := api.PostTweet(puzzle[1], values)
-    if (err != nil) {
-        fmt.Printf("%v\n%v", "Something went wrong", err)
-    }
-    fmt.Println(tweet)
+	for {
+		api := bot.GetTwitterApi()
+		puzzles := bot.GetPuzzles(*api)
+		values := url.Values{}
+		for id, text := range puzzles {
+			values.Set("in_reply_to_status_id", id)
+			tweet, err := api.PostTweet(text, values)
+			if err != nil {
+				fmt.Printf("%v\n%v", "Something went wrong", err)
+			}
+			fmt.Println(tweet)
+		}
+		time.Sleep(60 * time.Second)
 	}
 }
