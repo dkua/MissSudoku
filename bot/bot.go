@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"github.com/ChimeraCoder/anaconda"
 	"net/url"
+	"strconv"
 )
 
 func GetPuzzles(api anaconda.TwitterApi, since_id int64) map[int64]string {
 	values := url.Values{}
-	values.Set("since_id", string(since_id))
+	values.Set("since_id", strconv.FormatInt(since_id, 10))
 	values.Set("count", "50")
 
 	var max_id int64 = 0
@@ -27,7 +28,7 @@ func GetPuzzles(api anaconda.TwitterApi, since_id int64) map[int64]string {
 		}
 		if max_id == 0 {
 			max_id = timeline[len(timeline)-1].Id - 1
-			values.Set("max_id", string(max_id))
+			values.Set("max_id", strconv.FormatInt(max_id, 10))
 		}
 	}
 	return tweets
@@ -35,7 +36,7 @@ func GetPuzzles(api anaconda.TwitterApi, since_id int64) map[int64]string {
 
 func GetSinceId(api anaconda.TwitterApi) int64 {
 	values := url.Values{}
-	values.Set("screen_name", "misssudoku")
+	values.Set("user_id", "2301646202")
 	values.Set("count", "1")
 
 	user_timeline, err := api.GetUserTimeline(values)
@@ -44,5 +45,6 @@ func GetSinceId(api anaconda.TwitterApi) int64 {
 		return 0
 	}
 	last_tweet := user_timeline[0]
+	fmt.Println(user_timeline)
 	return last_tweet.InReplyToStatusID
 }
