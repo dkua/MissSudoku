@@ -9,10 +9,10 @@ import (
 	"strings"
 )
 
-func parseTimeline(timeline []anaconda.Tweet) map[string]string {
+func parseTimeline(timeline []anaconda.Tweet) map[int64]string {
 	tweets := make(map[string]string, 0)
 	for _, tweet := range timeline {
-		tweets[tweet.IdStr] = parseTweet(tweet)
+		tweets[tweet.Id] = parseTweet(tweet)
 	}
 	return tweets
 }
