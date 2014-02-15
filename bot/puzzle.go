@@ -32,15 +32,16 @@ func parseText(tweet_text string) (string, error) {
 	// or a single 81 char string
 	var buffer bytes.Buffer
 	text_array := strings.Fields(tweet_text)
+	regex := regexp.MustCompile(`[0-9]*\.*`)
 	for _, text := range text_array {
+		// Check validity of the text
+		text = strings.Join(regex.FindAllString(text, -1), "")
 		if len(text) == 9 || len(text) == 81 {
 			buffer.WriteString(text)
 		}
 	}
+	puzzle := buffer.String()
 
-	// Check validity of the puzzle and return, else return error
-	regex := regexp.MustCompile(`[0-9]*\.*`)
-	puzzle := strings.Join(regex.FindAllString(buffer.String(), -1), "")
 	if len(puzzle) == 81 {
 		solution, err := sudoku.Solve(puzzle)
 		if err != nil {
