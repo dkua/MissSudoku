@@ -1,9 +1,9 @@
 package bot
 
 import (
-	"encoding/json"
-	"github.com/ChimeraCoder/anaconda"
 	"os"
+
+	"github.com/ChimeraCoder/anaconda"
 )
 
 type Configuration struct {
@@ -14,14 +14,15 @@ type Configuration struct {
 }
 
 func GetTwitterApi() *anaconda.TwitterApi {
-	file, _ := os.Open("settings.json")
-	decoder := json.NewDecoder(file)
-	settings := &Configuration{}
-	decoder.Decode(&settings)
+	var config Configuration
+	config.ConsumerKey = os.Getenv("CONSUMER_KEY")
+	config.ConsumerSecret = os.Getenv("CONSUMER_SECRET")
+	config.AccessToken = os.Getenv("ACCESS_TOKEN")
+	config.AccessSecret = os.Getenv("ACCESS_SECRET")
 
-	anaconda.SetConsumerKey(settings.ConsumerKey)
-	anaconda.SetConsumerSecret(settings.ConsumerSecret)
-	api := anaconda.NewTwitterApi(settings.AccessToken, settings.AccessSecret)
+	anaconda.SetConsumerKey(config.ConsumerKey)
+	anaconda.SetConsumerSecret(config.ConsumerSecret)
+	api := anaconda.NewTwitterApi(config.AccessToken, config.AccessSecret)
 
 	return api
 }
