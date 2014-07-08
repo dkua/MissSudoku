@@ -1,1 +1,1 @@
-web: misssudoku -port=$PORT
+web: misssudoku
