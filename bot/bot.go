@@ -2,9 +2,10 @@ package bot
 
 import (
 	"fmt"
-	"github.com/ChimeraCoder/anaconda"
 	"net/url"
 	"strconv"
+
+	"github.com/ChimeraCoder/anaconda"
 )
 
 func GetSolutions(api anaconda.TwitterApi, since_id int64) [][]string {

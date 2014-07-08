@@ -2,13 +2,17 @@ package main
 
 import (
 	"fmt"
-	"github.com/dkua/MissSudoku/bot"
+	"net/http"
 	"net/url"
+	"os"
 	"time"
+
+	"github.com/dkua/MissSudoku/bot"
 )
 
 func main() {
 	api := bot.GetTwitterApi()
+	http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("PORT")), nil) // Used to bind Heroku port
 	for {
 		since_id := bot.GetSinceId(*api)
 		solutions := bot.GetSolutions(*api, since_id)
